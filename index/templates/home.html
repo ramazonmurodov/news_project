@@ -1,25 +1,57 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Новости</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-<h1>Главная страница</h1>
 
-<h2>Категории:</h2>
-<ul>
-{% for cat in categories %}
-    <li>{{ cat.category_name }}</li>
-{% endfor %}
-</ul>
+<header>
+    <h1>Новости</h1>
+</header>
 
-<h2>Новости:</h2>
-<ul>
-{% for item in news %}
-    <li>{{ item.title }}</li>
-{% endfor %}
-</ul>
+<main>
+    <!-- КАТЕГОРИИ -->
+    {% if categories %}
+        <section class="categories">
+            <h2>Категории:</h2>
+            <ul>
+                {% for cat in categories %}
+                    <li>
+                        <a href="{% url 'category_page' cat.id %}">
+                            {{ cat.category_name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% else %}
+        <p>Категорий пока нет.</p>
+    {% endif %}
+
+    <!-- НОВОСТИ -->
+    {% if news %}
+        {% for item in news %}
+            <article class="news-card">
+                <h2>
+                    <a href="{% url 'news_page' item.id %}">
+                        {{ item.title }}
+                    </a>
+                </h2>
+                <p>{{ item.content|slice:":200" }}...</p>
+            </article>
+        {% endfor %}
+    {% else %}
+        <p>Новостей пока нет.</p>
+    {% endif %}
+</main>
+
+<footer>
+    <p>© 2025 Новостной сайт</p>
+</footer>
 
 </body>
 </html>
+

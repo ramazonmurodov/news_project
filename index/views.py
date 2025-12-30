@@ -7,17 +7,6 @@ from .models import NewsCategory, News
 def home_page(request):
     # Достаем данные из БД
 
-
-
-
-
-
-
-
-
-
-
-
     categories = NewsCategory.objects.all()
     news = News.objects.all()
     # Передаем данные из фронт
