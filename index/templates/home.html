@@ -9,43 +9,77 @@
 <body>
 
 <header>
-    <h1>Новости</h1>
+    <div class="header-left">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'img/logo-news.png' %}" alt="Логотип" class="logo">
+        </a>
+    </div>
+
+    <div class="header-center">
+            <a href="{% url 'home'%}"><h1>Новости</h1></a>
+    </div>
+
+    <div class="header-right">
+        {% if user.is_authenticated %}
+        Привет, {{ user.username }} |
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Выйти</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}">Вход</a>
+        <a href="{% url 'register' %}">Регистрация</a>
+        {% endif %}
+
+    </div>
 </header>
 
-<main>
-    <!-- КАТЕГОРИИ -->
-    {% if categories %}
-        <section class="categories">
-            <h2>Категории:</h2>
-            <ul>
-                {% for cat in categories %}
-                    <li>
-                        <a href="{% url 'category_page' cat.id %}">
-                            {{ cat.category_name }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </section>
-    {% else %}
-        <p>Категорий пока нет.</p>
-    {% endif %}
 
-    <!-- НОВОСТИ -->
-    {% if news %}
+<main class="container">
+
+
+    <aside class="categories">
+        <h2>Категории</h2>
+        <ul>
+            <p>
+                <a href="{% url 'home' %}"
+                   class="{% if not current_category %}active{% endif %}">
+                    Все новости
+                </a>
+            </p>
+
+            {% for cat in categories %}
+            <p>
+                <a href="{% url 'category_page' cat.id %}"
+                   class="{% if current_category and current_category.id == cat.id %}active{% endif %}">
+                    {{ cat.category_name }}
+                </a>
+            </p>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <section class="news">
+        {% if current_category %}
+        <h2>Новости: {{ current_category.category_name }}</h2>
+        {% else %}
+        <h2>Все новости</h2>
+        {% endif %}
+
+        {% if news %}
         {% for item in news %}
-            <article class="news-card">
-                <h2>
-                    <a href="{% url 'news_page' item.id %}">
-                        {{ item.title }}
-                    </a>
-                </h2>
-                <p>{{ item.content|slice:":200" }}...</p>
-            </article>
+        <article class="news-card">
+            <h3>
+                <a href="{% url 'news_page' item.id %}">{{ item.title }}</a>
+            </h3>
+            <p>{{ item.content|slice:":200" }}...</p>
+        </article>
         {% endfor %}
-    {% else %}
+        {% else %}
         <p>Новостей пока нет.</p>
-    {% endif %}
+        {% endif %}
+    </section>
+
 </main>
 
 <footer>
@@ -54,4 +88,5 @@
 
 </body>
 </html>
+
 

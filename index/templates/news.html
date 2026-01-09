@@ -1,10 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ news_item.title }}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
+
+<header>
+    <h1>Новости</h1>
+    <a href="{% url 'home' %}" class="back-home">← Вернуться к списку новостей</a>
+</header>
+
+<main class="news-detail">
+    <article>
+        <h2>{{ news_item.title }}</h2>
+        <p>{{ news_item.content }}</p>
+    </article>
+</main>
+
+<footer>
+    <p>© 2025 Новостной сайт</p>
+</footer>
 
 </body>
 </html>
