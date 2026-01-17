@@ -16,12 +16,13 @@
     </div>
 
     <div class="header-center">
-            <a href="{% url 'home'%}"><h1>Новости</h1></a>
+        <a href="{% url 'home'%}"><h1>Новости</h1></a>
     </div>
 
     <div class="header-right">
         {% if user.is_authenticated %}
         Привет, {{ user.username }} |
+        <a href="{% url 'favorites' %}">⭐ Избранное</a> |
         <form method="post" action="{% url 'logout' %}" style="display:inline;">
             {% csrf_token %}
             <button type="submit" class="logout-button">Выйти</button>
@@ -30,33 +31,29 @@
         <a href="{% url 'login' %}">Вход</a>
         <a href="{% url 'register' %}">Регистрация</a>
         {% endif %}
-
     </div>
 </header>
 
-
 <main class="container">
-
 
     <aside class="categories">
         <h2>Категории</h2>
-        <ul>
-            <p>
-                <a href="{% url 'home' %}"
-                   class="{% if not current_category %}active{% endif %}">
-                    Все новости
-                </a>
-            </p>
 
-            {% for cat in categories %}
-            <p>
-                <a href="{% url 'category_page' cat.id %}"
-                   class="{% if current_category and current_category.id == cat.id %}active{% endif %}">
-                    {{ cat.category_name }}
-                </a>
-            </p>
-            {% endfor %}
-        </ul>
+        <p>
+            <a href="{% url 'home' %}"
+               class="{% if not current_category %}active{% endif %}">
+                Все новости
+            </a>
+        </p>
+
+        {% for cat in categories %}
+        <p>
+            <a href="{% url 'category_page' cat.id %}"
+               class="{% if current_category and current_category.id == cat.id %}active{% endif %}">
+                {{ cat.category_name }}
+            </a>
+        </p>
+        {% endfor %}
     </aside>
 
     <section class="news">
@@ -88,5 +85,3 @@
 
 </body>
 </html>
-
-

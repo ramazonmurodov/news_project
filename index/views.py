@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from .models import NewsCategory, News
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from .models import Favorite
 
 
 # Главная страница
@@ -48,3 +51,29 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+
+@login_required
+def add_to_favorites(request, pk):
+    news_item = get_object_or_404(News, id=pk)
+    Favorite.objects.get_or_create(
+        user=request.user,
+        news=news_item
+    )
+    return redirect('news_page', pk=pk)
+
+
+@login_required
+def remove_from_favorites(request, pk):
+    news_item = get_object_or_404(News, id=pk)
+    Favorite.objects.filter(
+        user=request.user,
+        news=news_item
+    ).delete()
+    return redirect('news_page', pk=pk)
+
+
+@login_required
+def favorites_page(request):
+    favorites = Favorite.objects.filter(user=request.user)
+    return render(request, 'favorites.html', {'favorites': favorites})

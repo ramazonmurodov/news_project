@@ -16,6 +16,26 @@
 <main class="news-detail">
     <article>
         <h2>{{ news_item.title }}</h2>
+
+        {% if user.is_authenticated %}
+        {% if is_favorite %}
+        <a href="{% url 'remove_from_favorites' news_item.id %}"
+           class="favorite-btn remove">
+            ❌ Убрать из избранного
+        </a>
+        {% else %}
+        <a href="{% url 'add_to_favorites' news_item.id %}"
+           class="favorite-btn add">
+            ⭐ Добавить в избранное
+        </a>
+        {% endif %}
+        {% else %}
+        <p>
+            <a href="{% url 'login' %}">Войдите</a>,
+            чтобы добавить в избранное
+        </p>
+        {% endif %}
+
         <p>{{ news_item.content }}</p>
     </article>
 </main>
